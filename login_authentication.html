@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Login Authentication</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #fde2e4, #cde8ff, #e2f7e1);
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    h2 {
+        margin-bottom: 10px;
+    }
+
+    input {
+        width: 260px;
+        padding: 10px;
+        margin: 6px 0;
+        border-radius: 6px;
+        border: 1px solid #aaa;
+        font-size: 15px;
+    }
+
+    button {
+        width: 260px;
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        background: #a8d8ea;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #91cfe6;
+    }
+
+    a {
+        color: blue;
+        cursor: pointer;
+        font-size: 14px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Registration Section -->
+<div id="registerSection">
+    <h2>Create Account</h2>
+    <input type="text" id="regUser" placeholder="Username">
+    <input type="password" id="regPass" placeholder="Password">
+    <button onclick="register()">Register</button>
+    <p>Already have an account? <a onclick="showLogin()">Login</a></p>
+</div>
+
+<!-- Login Section -->
+<div id="loginSection" style="display:none;">
+    <h2>Login</h2>
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p>Don't have an account? <a onclick="showRegister()">Register</a></p>
+</div>
+
+<!-- Secure Page -->
+<div id="securePage" style="display:none;">
+    <h2>Hello! Welcome to this page ☺️</h2>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+    // Load correct screen on page load
+    window.onload = function() {
+        let storedUser = localStorage.getItem("username");
+        if (storedUser) {
+            showLogin();
+        } else {
+            showRegister();
+        }
+    };
+
+    function showLogin() {
+        document.getElementById("registerSection").style.display = "none";
+        document.getElementById("loginSection").style.display = "block";
+        document.getElementById("securePage").style.display = "none";
+
+        // Clear login input fields when showing login page
+        document.getElementById("loginUser").value = "";
+        document.getElementById("loginPass").value = "";
+    }
+
+    function showRegister() {
+        document.getElementById("registerSection").style.display = "block";
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("securePage").style.display = "none";
+
+        // Clear register input fields
+        document.getElementById("regUser").value = "";
+        document.getElementById("regPass").value = "";
+    }
+
+    function register() {
+        let user = document.getElementById("regUser").value;
+        let pass = document.getElementById("regPass").value;
+
+        if (user === "" || pass === "") {
+            alert("All fields are required!");
+            return;
+        }
+
+        localStorage.setItem("username", user);
+        localStorage.setItem("password", pass);
+
+        alert("Registration Successful!");
+        showLogin();
+    }
+
+    function login() {
+        let user = document.getElementById("loginUser").value;
+        let pass = document.getElementById("loginPass").value;
+
+        let savedUser = localStorage.getItem("username");
+        let savedPass = localStorage.getItem("password");
+
+        if (user === savedUser && pass === savedPass) {
+            alert("Login Successful!");
+
+            document.getElementById("loginSection").style.display = "none";
+            document.getElementById("securePage").style.display = "block";
+        } else {
+            alert("Incorrect username or password!");
+        }
+    }
+
+    function logout() {
+        // Hide secure page
+        document.getElementById("securePage").style.display = "none";
+
+        // Clear inputs when logout
+        document.getElementById("loginUser").value = "";
+        document.getElementById("loginPass").value = "";
+
+        showLogin();
+    }
+</script>
+
+</body>
+</html>
